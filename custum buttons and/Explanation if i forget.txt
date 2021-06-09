@@ -1,0 +1,10 @@
+شرح في حال كنت ناسي 
+
+
+هدول الملفات بنحطهم في الdrawable
+
+وبنستدعيهم في الxml
+
+: مثلا هيك
+
+android:background="@drawable/btn1"
