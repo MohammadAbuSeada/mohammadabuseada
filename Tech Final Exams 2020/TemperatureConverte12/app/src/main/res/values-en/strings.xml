@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Convert the temperature to Fahrenheit</string>
+
+    <string name="about_fh">The Fahrenheit temperature scale is a temperature scale based on the freezing point of water
+    32 °C, the boiling point of water is 212 °C, and the difference between the two previous values ​​is divided into 180 °C.
+    equal parts, and in the eighteenth century the German physicist Daniel Gabriel Fahrenheit took an equal mixture of frozen salt
+     As the zero of his temperature scale, as he specified both the value of 30 degrees Celsius, and 90 degrees Celsius
+     for the water freezing temperature points and the normal body temperature, respectively, and then these points were adjusted to 32 °C
+    The scientist Fahrenheit developed the first modern device to measure temperature, the mercury thermometer in 1714 AD, and it was more accurate than the previous scales used to measure temperatures. Zero point on his scale is the lowest point, 60 degrees Celsius is the boiling point of water, 7.5 is the melting point of ice, and 22.5 is the body temperature.
+
+degrees Celsius, and 96 degrees Celsius, but the final scale needs to adjust the last value of the final volume to 98.6 degrees Celsius.</string>
+
+    //Main Activity
+    <string name="conversion_btn">Calculate the temperature in Fahrenheit</string>
+    <string name="about_btn">about Fahrenheit</string>
+
+    //Custom Dialog
+    <string name="TextView">Enter the temperature in Celsius</string>
+    <string name="EditText">Enter the temperature</string>
+    <string name="cancel_btn">cancel</string>
+    <string name="run_btn">Calculate</string>
+    <string name="result_tv">0</string>
+
+    //Convert Fragment
+    <string name="Dialog_btn">Press here</string>
+
+
+
+
+</resources>
