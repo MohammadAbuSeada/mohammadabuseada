@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".AddActivity">
+
+    <TextView
+        android:id="@+id/textView_activity_add"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:gravity="center"
+        android:text="إضافة بيانات مدرسة مهنية"
+        android:fontFamily="@font/tajawal"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/shcoolname_edt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="إسم المدرسة المهنية"
+        android:fontFamily="@font/tajawal2"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/shcooladdress_edt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="عنوان المدرسة"
+        android:fontFamily="@font/tajawal2"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/phone_edt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:gravity="right"
+        android:hint="رقم الهاتف"
+        android:fontFamily="@font/tajawal2"
+        android:inputType="phone"
+        tools:ignore="RtlHardcoded" />
+
+    <EditText
+        android:id="@+id/number_edt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="عدد طلاب المدرسة"
+        android:fontFamily="@font/tajawal2"
+        android:inputType="number" />
+
+    <Button
+        android:id="@+id/add_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="إضافة"
+        android:fontFamily="@font/tajawal"
+        android:textSize="24sp"
+        android:background="@drawable/btn1"/>
+
+    <Button
+        android:id="@+id/back_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="للخلف"
+        android:textSize="24sp"
+        android:fontFamily="@font/tajawal"
+        android:background="@drawable/btn1"/>
+</LinearLayout>
