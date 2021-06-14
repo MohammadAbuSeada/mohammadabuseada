@@ -1,0 +1,161 @@
+
+
+import android.app.AlertDialog
+import android.content.DialogInterface
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import kotlinx.android.synthetic.main.dialog.view.*
+import kotlinx.android.synthetic.main.fragment_calculation.*
+import kotlinx.android.synthetic.main.fragment_calculation.view.*
+import kotlinx.android.synthetic.main.fragment_calculation.view.addBtn
+
+/**
+ * A simple [Fragment] subclass.
+ */
+class Calculation : Fragment() {
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        val view = inflater.inflate(R.layout.fragment_calculation, container, false)
+
+
+        view.addBtn.setOnClickListener {
+            val x = view.editText.text.toString().toDouble()
+            val y = view.editText2.text.toString().toDouble()
+            var res1 = x + y
+            val builder = AlertDialog.Builder(activity)
+            builder.setTitle("الناتج")
+            builder.setMessage(res1.toString())
+            val dialog =builder.create()
+            dialog.show()
+            view.editText.text = null
+            view.editText2.text = null
+        }
+
+        view.subBtn.setOnClickListener {
+            val x = view.editText.text.toString().toDouble()
+            val y = view.editText2.text.toString().toDouble()
+            val res2 = x - y
+            val builder = AlertDialog.Builder(activity)
+            builder.setTitle("الناتج")
+            builder.setMessage(res2.toString())
+            val dialog =builder.create()
+            dialog.show()
+            view.editText.text = null
+            view.editText2.text = null
+        }
+
+
+        view.mulBtn.setOnClickListener {
+            val x = view.editText.text.toString().toDouble()
+            val y = view.editText2.text.toString().toDouble()
+            var res3 = x * y
+            val builder = AlertDialog.Builder(activity)
+            builder.setTitle("الناتج")
+            builder.setMessage(res3.toString())
+            val dialog =builder.create()
+            dialog.show()
+            view.editText.text = null
+            view.editText2.text = null
+        }
+
+
+        view.divBtn.setOnClickListener {
+            val x = view.editText.text.toString().toDouble()
+            val y = view.editText2.text.toString().toDouble()
+            val res4 = x / y
+            val builder = AlertDialog.Builder(activity)
+            builder.setTitle("الناتج")
+            builder.setMessage(res4.toString())
+            val dialog =builder.create()
+            dialog.show()
+            view.editText.text = null
+            view.editText2.text = null
+        }
+
+
+        return view
+    }
+
+
+}
+
+-----------------------------
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Calculation" >
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="الرقم الاول "
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/editText2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="الرقم الثاني "
+        android:inputType="number" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/addBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:src="@drawable/plus" />
+
+        <ImageView
+            android:id="@+id/subBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:src="@drawable/minus" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/mulBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:src="@drawable/cancel" />
+
+        <ImageView
+            android:id="@+id/divBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:src="@drawable/division" />
+    </LinearLayout>
+
+</LinearLayout>

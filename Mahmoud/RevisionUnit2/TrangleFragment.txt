@@ -1,0 +1,373 @@
+
+"الكود الخاص بالFragmentTrangel "
+
+
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
+import kotlinx.android.synthetic.main.fragment_triangle.*
+import kotlinx.android.synthetic.main.fragment_triangle.view.*
+
+/**
+ * A simple [Fragment] subclass.
+ */
+class TriangleActivity : Fragment() {
+
+
+    @SuppressLint("SetTextI18n")
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        val view = inflater.inflate(R.layout.fragment_triangle, container, false)
+
+        val array_oper1 = ArrayList<String>()
+        val array_oper2 = ArrayList<String>()
+        val array_result = ArrayList<String>()
+
+        view.actionBtn1.setOnClickListener {
+            val num1 = view.editTrangle1.text.toString().toInt()
+            val num2 = view.editTrangle2.text.toString().toInt()
+            val num3 = view.editTrangle3.text.toString().toInt()
+            val num4 = view.editTrangle4.text.toString().toInt()
+            val num5 = view.editTrangle5.text.toString().toInt()
+            val area_trangle = (num1 + num2 + num3)
+            val perimeter_trangle = (num4 * num5) / 2
+
+            view.textViewTrangle.text = "مساحة المثلث = ${perimeter_trangle}\n" +
+                    "محيط المثلث = ${area_trangle}"
+
+            array_oper1.add(("$num1 + $num2 + $num3"))
+            array_oper2.add("$num4 * $num5 / 2")
+            array_result.add(view.textViewTrangle.text.toString())
+
+            val arrayAdapter = CustomTrangle(activity!!, array_oper1, array_oper2, array_result)
+            grid.adapter = arrayAdapter
+
+
+            grid.setOnItemClickListener { adapterView, view, i, l ->
+                val id_mes = i + 1
+                val oper1_mes = "عملية المحيط" + ("$num1 + $num2 + $num3")
+                val res1_mes = "ناتج المحيط = ${area_trangle}"
+                val oper2_mes = "عملية المساحة" + ("$num4 * $num5 / 2")
+                val res2_mes = "ناتج المساحة = ${perimeter_trangle} "
+
+                val intent = Intent(activity, DetailsActivity::class.java)
+
+                intent.putExtra("oper1_mes", oper1_mes)
+                intent.putExtra("res1_mes", res1_mes)
+                intent.putExtra("oper2_mes", oper2_mes)
+                intent.putExtra("res2_mes", res2_mes)
+                intent.putExtra("id", id_mes)
+
+                startActivity(intent)
+
+//                val name = adapterView.getItemAtPosition(i).toString()
+//                Toast.makeText(context ,name , Toast.LENGTH_SHORT).show()
+
+            }
+
+            view.editTrangle1.text = null
+            view.editTrangle2.text = null
+            view.editTrangle3.text = null
+            view.editTrangle4.text = null
+            view.editTrangle5.text = null
+
+        }
+        return view
+    }
+}
+
+-----------------------------
+" الXml الخاص بالFragmentTrangel"
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".TriangleActivity" >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="43dp"
+                android:gravity="center"
+                android:text="خاص بالمحيط "
+                android:textSize="24sp" />
+
+            <EditText
+                android:id="@+id/editTrangle1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint=" ادخل طول الضلع الاول "
+                android:inputType="textPersonName"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/editTrangle2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="ادخل طول الضلع الثاني "
+                android:inputType="textPersonName"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/editTrangle3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="ادخل طول الضلع الثالث   "
+                android:inputType="textPersonName"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="43dp"
+                android:gravity="center"
+                android:text="خاص بالمساحة "
+                android:textSize="24sp" />
+
+            <EditText
+                android:id="@+id/editTrangle4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="ادخل الارتفاع "
+                android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/editTrangle5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="ادخل طول القاعدة  "
+                android:inputType="textPersonName"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/actionBtn1"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@drawable/back3"
+                android:text="احسب "
+                android:textColor="#FFFFFF"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/textViewTrangle"
+                android:layout_width="match_parent"
+                android:layout_height="97dp"
+                android:gravity="center"
+                android:text="النتيجة"
+                android:textSize="30sp" />
+
+            <GridView
+                android:id="@+id/grid"
+                android:layout_width="match_parent"
+                android:layout_height="278dp"
+                android:background="@drawable/list" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
+
+
+-----------------------------------------------------------
+"الكود الخاص ب CustomTrangel "
+
+
+import android.annotation.SuppressLint
+import android.content.Context
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import kotlinx.android.synthetic.main.dialog_list.view.*
+
+
+class CustomTrangle(
+    context: Context,
+    private var operation1: ArrayList<String>,
+    private var operation2: ArrayList<String> ,
+    private var result: ArrayList<String>
+)
+    :ArrayAdapter<String>(context , R.layout.dialog_list , operation1) {
+
+    @SuppressLint("ViewHolder", "SetTextI18n")
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+
+        val l:LayoutInflater = LayoutInflater.from(context)
+        val view = l.inflate(R.layout.dialog_list , parent , false)
+
+       view.operText1.text = operation1[position]
+       view.operText2.text = operation2[position]
+       view.rseultText.text = result[position]
+       view.opernum.text= "-"+(position +1).toString()
+        return view
+    }
+}
+
+-----------------------------
+
+"الXml الخاص بال itemTrangel"
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="79dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="303dp"
+            android:layout_height="80dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/operText1"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:hint="العملية الاولى "
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/operText2"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:hint="العلمية الثانية"
+                android:textSize="24sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/opernum"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="0"
+            android:textColor="#000000"
+            android:textSize="30sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/rseultText"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:gravity="center"
+        android:hint="ناتج العمليتان"
+        android:textSize="24sp" />
+
+</LinearLayout>
+
+-----------------------------------------------------------
+"الكود الخاص بال Details ACtivity "
+
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import kotlinx.android.synthetic.main.activity_details.*
+
+class DetailsActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_details)
+
+        val intent1 = getIntent()
+        val id_get = intent1.getStringExtra("id")
+        idDtl.text = id_get
+
+        val intent2 = getIntent()
+        val opre1_get = intent2.getStringExtra("oper1_mes")
+        oper1Dtl.text = opre1_get
+
+        val intent3 = getIntent()
+        val res1_get = intent3.getStringExtra("res1_mes")
+        res1Dtl.text = res1_get
+
+        val intent4 = getIntent()
+        val opre2_get = intent4.getStringExtra("oper2_mes")
+        oper2Dtl.text = opre2_get
+
+        val intent5 = getIntent()
+        val res2_get = intent5.getStringExtra("res2_mes")
+        res2Dtl.text = res2_get
+
+
+    }
+}
+-----------------------------
+
+"ال Xml الخاص بال  Details ACtivity "
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".DetailsActivity" >
+
+    <TextView
+        android:id="@+id/idDtl"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:hint="رقم العملية"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/oper1Dtl"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:hint="حساب المحيط"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/res1Dtl"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:hint="ناتج المحيط"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/oper2Dtl"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:hint="حساب المساحة"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/res2Dtl"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:hint="ناتج المساحة"
+        android:textSize="24sp" />
+</LinearLayout>

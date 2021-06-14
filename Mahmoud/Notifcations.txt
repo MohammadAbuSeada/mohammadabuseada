@@ -1,0 +1,69 @@
+"إشعار مخصص للإصدارات الحديثة  في واجهة Fragment"
+
+   val id = 1234
+            val CHANNEL_ID = "chananel_01"
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val mChannel = NotificationChannel(CHANNEL_ID , "اسم" , importance)
+         val notification = activity?.let { it1 ->
+             NotificationCompat.Builder(it1, CHANNEL_ID)
+                 .setSmallIcon(R.drawable.lamp)
+                 .setContentTitle("حول درجة الحرارة الى الفهرنهايت")
+                 .setContentText("هذة درجة حرارة تجمد الماء في الفهرنهايت..!!")
+                 .build()
+         }
+            val mNotificationManager = activity?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            mNotificationManager.createNotificationChannel(mChannel)
+            mNotificationManager.notify(id , notification)
+
+
+-------------------------------------------------------
+"اشعار عادي في واجهة Fragment"
+
+  val id = 12345
+
+     val notification = NotificationCompat.Builder(activity!!)
+     .setSmallIcon(R.drawable.lamp)
+     .setContentTitle("حول درجة الحرارة الى الفهرنهايت")
+     .setContentText("هذة درجة حرارة تجمد الماء في الفهرنهايت..!!")
+     .build()
+
+     val mNotificationManager =
+     activity?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+     mNotificationManager.notify(id ,notification )
+
+--------------------------------------------------------
+"إشعار يتناسب مع جميع الإصدارات في واجهة Fragment"
+
+ @RequiresApi(Build.VERSION_CODES.N)
+    fun viewNotification(title: String, text: String, icon: Int) {
+
+        val CHANNEL_ID = "channel_id";
+        val importance = NotificationManager.IMPORTANCE_HIGH;
+        val myNotificationManager =
+            getActivity()?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val myChannel = NotificationChannel(CHANNEL_ID, "Channel Name", importance);
+            myNotificationManager.createNotificationChannel(myChannel);
+        }
+        val notification =
+            NotificationCompat.Builder(getActivity()!!.applicationContext, CHANNEL_ID)
+                .setSmallIcon(icon)
+                .setContentTitle(title)
+                .setContentText(text)
+                .build();
+        myNotificationManager.notify(2468, notification);
+    }
+
+"استخدامها يكون على النحو الاتي على سبيل المثال  "
+
+viewNotification( " معلومة "  ,  "هذه درجة حرارة تجمد الماء في نظام الفهرنهايت" , R.drawable.lamp )
+
+
+-------------------------------------------------------
+""
+
+------------------------------------------------------
+
+
+

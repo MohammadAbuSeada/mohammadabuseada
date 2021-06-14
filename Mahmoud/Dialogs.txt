@@ -1,0 +1,62 @@
+
+"مربع حوار عادي "
+
+var builder = AlertDialog.Builder(context)
+            builder.setTitle("الناتج")
+            builder.setMessage("")
+            builder.setPositiveButton("OK") { _: DialogInterface, _: Int ->
+
+            }
+            builder.setNegativeButton("Cancel") { _: DialogInterface, _: Int ->
+
+            }
+
+            val dialog = builder.create()
+            dialog.show()
+
+------------------------------------------------
+
+"مربع حوار مخصص" 
+
+ val inflater = LayoutInflater.from(this)
+            val view = inflater.inflate(R.layout.dialog, null)
+
+            val builder = AlertDialog.Builder(this)
+            builder.setView(view)
+            val dialog = builder
+            dialog.show()
+
+------------------------------------------------
+"مربع حوار عادي في Fragment"
+
+val builder = AlertDialog.Builder(activity)
+            builder.setTitle("الناتج")
+            builder.setMessage(res1.toString())
+            val dialog =builder.create()
+            dialog.show()
+
+------------------------------------------------
+"مربع حوار مخصص في Fragment"
+
+val inflater = LayoutInflater.from(activity)
+            val view = inflater.inflate(R.layout.dialog  , null)
+            val builder = AlertDialog.Builder(activity)
+            builder.setTitle("ميحط ام مساحة ؟")
+            builder.setView(view)
+            val dialog = builder.create()
+            dialog.show()
+
+------------------------------------------------
+"مربع حوار في Database"
+
+val dialogBuilder = android.app.AlertDialog.Builder(this)
+
+            val inflater = LayoutInflater.from(this)
+            val dialogView = inflater.inflate(R.layout.addactivity, null)
+
+            dialogBuilder.setView(dialogView)
+
+val dialog = dialogBuilder.create()
+            dialog.show()
+
+ 

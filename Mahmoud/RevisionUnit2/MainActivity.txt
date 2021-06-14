@@ -1,0 +1,109 @@
+
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import kotlinx.android.synthetic.main.activity_main.*
+
+class MainActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+
+        triangleBtn.setOnClickListener {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment, TriangleActivity())
+                .commit()
+        }
+
+
+        calcolationBtn.setOnClickListener {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment, Calculation())
+                .commit()
+        }
+
+        circleBtn.setOnClickListener {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment, Circle())
+                .commit()
+        }
+
+        squreBtn.setOnClickListener {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment, Square())
+                .commit()
+        }
+        
+    }
+
+}
+
+-----------------------------
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity" >
+
+    <fragment
+        android:id="@+id/fragment"
+        android:name="com.example.unite2.BlankFragment"
+        android:layout_width="match_parent"
+        android:layout_height="391dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/calcolationBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@drawable/back3"
+            android:text=" الحسابات "
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/squreBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@drawable/back3"
+            android:text="المربع"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/circleBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@drawable/back3"
+            android:text="الدائرة"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/triangleBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@drawable/back3"
+            android:text="المثلث"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
+    </LinearLayout>
+</LinearLayout>

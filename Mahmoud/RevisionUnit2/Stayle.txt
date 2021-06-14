@@ -1,0 +1,38 @@
+"Stayle"
+
+
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/newColorPrimary</item>
+        <item name="colorPrimaryDark">@color/newColorPrimaryDark</item>
+        <item name="colorAccent">@color/newColorAccent</item>
+    </style>
+
+    <style name="newAppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+
+</resources>
+
+----------------------------------------------------
+"Color"
+
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#04009a</color>
+    <color name="colorPrimaryDark">#77acf1</color>
+    <color name="colorAccent">#3edbf0</color>
+
+
+
+    <color name="newColorPrimary">#440a67</color>
+    <color name="newColorPrimaryDark">#93329e</color>
+    <color name="newColorAccent">#b4aee8</color>
+</resources>
