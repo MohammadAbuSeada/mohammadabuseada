@@ -1,0 +1,123 @@
+//Notification Function
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun notify(id:Int, title: String, text: String, icon:Int, context: Context){
+    if (Build.VERSION.SDK_INT >= 26){
+        val importance = NotificationManager.IMPORTANCE_HIGH
+        val mChannel = NotificationChannel("channel_01", "My app", importance)
+
+        val notification = NotificationCompat.Builder(context, "channel_01")
+            .setSmallIcon(icon)
+            .setContentTitle(title)
+            .setContentText(text)
+            .build()
+        val mNotificationManager= context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        mNotificationManager.createNotificationChannel(mChannel)
+        mNotificationManager.notify(id, notification)
+    }
+    else{
+        val notification = NotificationCompat.Builder(context)
+            .setSmallIcon(icon)
+            .setContentTitle(title)
+            .setContentText(text)
+            .build()
+
+        val mNotificationManager= context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        mNotificationManager.notify(id, notification)
+    }
+}
+
+/
+
+//إستدعاء Notification Function
+
+	notify(myid++, "title","message", R.drawable.ic_launcher_foreground, this)
+
+  //	in Activity == this                //
+ //	in Fragment == requireContext()   //
+//	in CustomAdapter == context	 //
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+//Dialog
+
+Classic Dialog
+
+dialogButton.setOnClickListener {
+    val dialogBuilder = AlertDialog.Builder(this);
+    dialogBuilder.setTitle("Warning");
+    dialogBuilder.setMessage("Do you want to close the app?");
+
+    dialogBuilder.setPositiveButton("Ok") { _ : DialogInterface, _ : Int ->
+        finish();
+    }
+
+    dialogBuilder.setNegativeButton("Cancel") { _ : DialogInterface, _ : Int ->
+    }
+
+    val dialog = dialogBuilder.create();
+    dialog.show();
+}
+
+//
+
+Custom Dialog
+
+        dialogButton.setOnClickListener {
+	            val layoutInflater = LayoutInflater.from(this);
+	            val view = layoutInflater.inflate(R.layout.dialog, null);
+	
+
+	            val dialogBuilder = AlertDialog.Builder(this);
+	            dialogBuilder.setView(view);
+	
+
+	            val dialog = dialogBuilder.create();
+	            dialog.show();
+	
+
+	            view.addButton.setOnClickListener {
+	                val name = view.dialogInput.text.toString();
+	                names.add(name);
+	                myAdapter.notifyDataSetChanged();
+	                dialog.cancel();
+	            }
+	
+
+	            view.cancelButton.setOnClickListener {
+	                dialog.cancel();
+	            }
+	        }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//Fragment
+
+//Write this in the Activity in which it will be showed
+/
+button.setOnClickListener {
+
+supportFragmentManager.beginTransaction()
+    .replace(R.id.layout_fragment_1,BlankFragment_1())
+    .commit()
+    }
+
+
+//Write this in the Fragment
+/
+override fun onCreateView(
+    inflater: LayoutInflater, container: ViewGroup?,
+    savedInstanceState: Bundle?
+): View? {
+    // Inflate the layout for this fragment
+    val view= inflater.inflate(R.layout.fragment_add, container, false)
+    view.button.setOnClickListener {
+        val n1=view.num1.text.toString().toDouble()
+        val n2=view.num2.text.toString().toDouble()
+
+        view.textView.text=(n1+n2).toString()
+    }
+    return view
+}

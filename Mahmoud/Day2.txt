@@ -1,0 +1,90 @@
+"الكود الخاص بالتثبيت واجهة لfragment"
+
+ supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment , AboutFragment())
+            .commit()
+
+--------------------------------------------
+"الكود الخاص بConvertfragment"
+
+import android.app.AlertDialog
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.icu.lang.UCharacter.GraphemeClusterBreak.L
+import android.os.Build
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationCompat
+import kotlinx.android.synthetic.main.custom_dialog.*
+import kotlinx.android.synthetic.main.custom_dialog.view.*
+import kotlinx.android.synthetic.main.fragment_covert.view.*
+import kotlinx.android.synthetic.main.fragment_covert.view.actionBtn
+
+/**
+ * A simple [Fragment] subclass.
+ */
+@Suppress("NAME_SHADOWING")
+class CovertFragment : Fragment() {
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        val view =
+            inflater.inflate(R.layout.fragment_covert, container, false)
+
+        view.actionBtn.setOnClickListener {
+
+            val inflater = LayoutInflater.from(activity!!)
+            val view1 = inflater.inflate(R.layout.custom_dialog, null)
+            val builder = AlertDialog.Builder(activity)
+            builder.setView(view1)
+            val dialog = builder.create()
+            dialog.show()
+
+            view1.actionBtn.setOnClickListener {
+                val input = view1.celsiusText.text.toString().toInt()
+                val result = (input * 9 / 5) + 32
+                view1.resluteText_Dialog.text = result.toString()
+                view1.celsiusText.text = null
+                if (result == 32) {
+                    viewNotification(
+                        "معلومة",
+                        "هذه درجة حرارة تجمد الماء في نظام الفهرنهايت",
+                        R.drawable.notification
+                    )
+                }
+            }
+        }
+        return view
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun viewNotification(title: String, text: String, icon: Int) {
+
+        val CHANNEL_ID = "channel_id";
+        val importance = NotificationManager.IMPORTANCE_HIGH;
+        val myNotificationManager =
+            getActivity()?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val myChannel = NotificationChannel(CHANNEL_ID, "Channel Name", importance)
+            myNotificationManager.createNotificationChannel(myChannel);
+        }
+        val notification =
+            NotificationCompat.Builder(getActivity()!!.applicationContext, CHANNEL_ID)
+                .setSmallIcon(icon)
+                .setContentTitle(title)
+                .setContentText(text)
+                .build();
+        myNotificationManager.notify(2468, notification);
+    }
+
+}
