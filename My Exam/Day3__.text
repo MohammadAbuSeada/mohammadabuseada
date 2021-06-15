@@ -1,0 +1,313 @@
+-----------------------------------------------------------------------
+Simple Coding
+-----------------------------------------------------------------------
+
+class SchoolModel(
+    var id: Int,
+    var name: String,
+    var address: String,
+    var phone: Int,
+    var number: Int
+)
+class DatabaseHandler(context: Context): SQLiteOpenHelper(context,DATABASE_NAME,null,DATABASE_VERSION) {
+    companion object {
+        private val DATABASE_VERSION = 1
+        private val DATABASE_NAME = "school_db"
+        private val TABLE_NAME = "school"
+        private val KEY_ID = "id"
+        private val KEY_NAME = "name"
+        private val KEY_ADDRESS = "address"
+        private val KEY_PHONE = "phone"
+        private val KEY_NUMBER = "number"
+    }
+    override fun onCreate(db: SQLiteDatabase?) {
+        val CREATE_TABLE = ("CREATE TABLE " + TABLE_NAME + "("
+                + KEY_ID +  " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + KEY_NAME +  " TEXT,"
+                + KEY_ADDRESS +  " TEXT,"
+                + KEY_PHONE +  " INTEGER,"
+                + KEY_NUMBER +  " INTEGER"
+                + ")"
+                )
+        db?.execSQL(CREATE_TABLE)
+    }
+    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
+        db!!.execSQL("DROP TABLE IF EXISTS $TABLE_NAME")
+        onCreate(db)
+    }
+    fun addSchool(schoolModel: SchoolModel):Long{
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(KEY_NAME, schoolModel.name)
+        contentValues.put(KEY_ADDRESS, schoolModel.address)
+        contentValues.put(KEY_PHONE, schoolModel.phone)
+        contentValues.put(KEY_NUMBER, schoolModel.number)
+        val success = db.insert(TABLE_NAME, null, contentValues)
+        db.close()
+        return success
+    }
+    fun viewSchool():ArrayList<SchoolModel>{
+        val list = ArrayList<SchoolModel>()
+        val selectQuery = "SELECT  * FROM $TABLE_NAME"
+        val db = this.readableDatabase
+        var cursor: Cursor? = null
+        try{
+            cursor = db.rawQuery(selectQuery, null)
+        }catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return ArrayList()
+        }
+        if (cursor.moveToFirst()) {
+            do {
+                val schoolModel = SchoolModel(
+                    cursor.getInt(cursor.getColumnIndex(KEY_ID)),
+                    cursor.getString(cursor.getColumnIndex(KEY_NAME)),
+                    cursor.getString(cursor.getColumnIndex(KEY_ADDRESS)),
+                    cursor.getInt(cursor.getColumnIndex(KEY_PHONE)),
+                    cursor.getInt(cursor.getColumnIndex(KEY_NUMBER))
+                )
+                list.add(schoolModel)
+            } while (cursor.moveToNext())
+        }
+        return list
+    }
+    fun deleteSchool(id: Int):Int{
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(KEY_ID, id)
+        val success = db.delete(TABLE_NAME,"$KEY_ID="+ id,null)
+        db.close()
+        return success
+    }
+}
+class SchoolAdapter(context: Context,
+                    private val schools: ArrayList<SchoolModel>)
+    : ArrayAdapter<SchoolModel>(context, R.layout.custom_view_layout, schools) {
+    @SuppressLint("ViewHolder")
+    override fun getView(position: Int, view: View?, parent: ViewGroup): View {
+        val inflater: LayoutInflater = LayoutInflater.from(context)
+        val rowView = inflater.inflate(R.layout.custom_view_layout, parent, false)
+        rowView.details_btn.setOnClickListener {
+            val intent = Intent(context, DetailsActivity::class.java).apply {
+                putExtra("id", position)
+            }
+            context.startActivity(intent)
+        }
+        rowView.delete_btn.setOnClickListener {
+            val databaseHandler = DatabaseHandler(context)
+            databaseHandler.deleteSchool(schools[position].id)
+            schools.removeAt(position)
+            schoolAdapter?.notifyDataSetChanged()
+            Toast.makeText(getContext(),"record deleted", Toast.LENGTH_LONG).show()
+        }
+        rowView.tv_customview.text = schools[position].name
+        return rowView
+    }
+}
+class AddActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_add)
+        back_btn.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
+        add_btn.setOnClickListener {
+            schoolHelper?.addSchool(
+                SchoolModel(
+                    1,
+                    name = shcoolname_edt.text.toString(),
+                    address = shcooladdress_edt.text.toString(),
+                    phone = phone_edt.text.toString().toInt(),
+                    number = number_edt.text.toString().toInt()
+                )
+            )
+            shcoolname_edt.setText("")
+            shcooladdress_edt.setText("")
+            phone_edt.setText("")
+            number_edt.setText("")
+        }
+    }
+}
+// ShowActivity
+var schools: ArrayList<SchoolModel>? = null
+var schoolHelper: DatabaseHandler? = null
+var schoolAdapter: SchoolAdapter? = null
+class ShowActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_show)
+        schoolHelper = DatabaseHandler(this)
+        schools = schoolHelper!!.viewSchool()
+        schoolAdapter = SchoolAdapter(this, schools!!)
+        listview.adapter = schoolAdapter
+    }
+}
+// DetailsActivity
+class DetailsActivity : AppCompatActivity() {
+    @SuppressLint("SetTextI18n")
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_details)
+        val position = intent.getIntExtra("id", Int.MAX_VALUE)
+        shcoolname_tv.text ="اسم المدرسة: " + schools?.get(position)?.name
+        shcooladdress_tv.text ="عنوان المدرسة: " +  schools?.get(position)?.address
+        phone_tv.text ="رقم الهاتف: " +  schools?.get(position)?.phone.toString()
+        number_tv.text ="عدد الطلاب: " +  schools?.get(position)?.number
+        back_details_btn.setOnClickListener {
+            val intent = Intent(this, ShowActivity::class.java)
+            startActivity(intent)
+        }
+    }
+}
+-----------------------------------------------------------------------
+Another Coding Example
+-----------------------------------------------------------------------
+// Database Helper
+class MyDatabase (context: Context): SQLiteOpenHelper (
+    context,
+    MyDatabase.DATABASE_NAME,
+    null,
+    MyDatabase.DATABASE_VERSION
+) {
+    override fun onCreate(db: SQLiteDatabase?) {
+        db!!.execSQL(DATABASE_CREATE);
+    }
+    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
+        db!!.execSQL("DROP TABLE IF EXISTS $DATABASE_NAME;");
+    }
+    companion object {
+        val BLOG_ID = "ID";
+        val BLOG_TITLE = "TITLE";
+        val BLOG_DESCTIPTION = "DESCRIPTION";
+        val DATABASE_TABLE_NAME = "BLOG";
+        private val DATABASE_NAME = "data.db";
+        private val DATABASE_VERSION = 1;
+        private val DATABASE_CREATE =
+            "CREATE TABLE IF NOT EXISTS $DATABASE_TABLE_NAME " +
+                    "($BLOG_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "$BLOG_TITLE TEXT NOT NULL, " +
+                    "$BLOG_DESCTIPTION TEXT NOT NULL);";
+    }
+    fun addBlog (blogTemplate: BlogTemplate) {
+        val db = this.writableDatabase;
+        val values = ContentValues();
+        values.put(BLOG_TITLE, blogTemplate.title);
+        values.put(BLOG_DESCTIPTION, blogTemplate.description);
+
+        db.insert(DATABASE_TABLE_NAME, null, values);
+        db.close();
+    }
+    fun updateBlog (blogTemplate: BlogTemplate) {
+        val db = this.writableDatabase;
+        val values = ContentValues();
+        values.put(BLOG_TITLE, blogTemplate.title);
+        values.put(BLOG_DESCTIPTION, blogTemplate.description);
+        db.update(DATABASE_TABLE_NAME, values, "$BLOG_ID = \"${blogTemplate.id}\";", null);
+        db.close();
+    }
+    fun deleteBlog (blogID: Int) {
+        val db = this.writableDatabase;
+        db.execSQL("DELETE FROM $DATABASE_TABLE_NAME WHERE $BLOG_ID = \"$blogID\";");
+    }
+    fun getBlog (): ArrayList<BlogTemplate> {
+        var blogList = ArrayList<BlogTemplate>();
+        val db = this.writableDatabase;
+        val query = "SELECT * FROM $DATABASE_TABLE_NAME;";
+        var cursor: Cursor? = null;
+        try {
+            cursor = db.rawQuery(query, null);
+        } catch (error: SQLiteException) {
+            db.execSQL(query);
+            return ArrayList();
+        }
+        if (cursor.moveToFirst()) {
+            do {
+                val blogID = cursor.getInt(cursor.getColumnIndex(BLOG_ID));
+                val blogTitle = cursor.getString(cursor.getColumnIndex(BLOG_TITLE));
+                val blogDescription = cursor.getString(cursor.getColumnIndex(BLOG_DESCTIPTION));
+                val blog = BlogTemplate(blogID, blogTitle, blogDescription);
+                blogList.add(blog);
+            } while (cursor.moveToNext());
+        }
+        return blogList;
+    }
+    fun searchBlog (blogTitle: String): ArrayList<BlogTemplate> {
+        var blogList = ArrayList<BlogTemplate>();
+        val db = this.writableDatabase;
+        val query = "SELECT * FROM $DATABASE_TABLE_NAME WHERE $BLOG_TITLE LIKE \'$blogTitle\';";
+        var cursor: Cursor? = null;
+        try {
+            cursor = db.rawQuery(query, null);
+        } catch (error: SQLiteException) {
+            db.execSQL(query);
+            return ArrayList();
+        }
+        if (cursor.moveToFirst()) {
+            do {
+                val blogID = cursor.getInt(cursor.getColumnIndex(BLOG_ID));
+                val blogTitle = cursor.getString(cursor.getColumnIndex(BLOG_TITLE));
+                val blogDescription = cursor.getString(cursor.getColumnIndex(BLOG_DESCTIPTION));
+                val blog = BlogTemplate(blogID, blogTitle, blogDescription);
+                blogList.add(blog);
+            } while (cursor.moveToNext());
+        }
+        return blogList;
+    }
+}
+// Model
+class BlogTemplate (val id: Int, val title: String, val description: String) {}
+// Custom Adapter
+class CustomAdapter (context: Context, private val blog: ArrayList<BlogTemplate>)
+    : ArrayAdapter<BlogTemplate>(context, R.layout.blog, blog) {
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        val layoutInflater: LayoutInflater = LayoutInflater.from(context);
+        val view: View = layoutInflater.inflate(R.layout.blog, parent, false);
+        view.blogID.text = blog[position].id.toString();
+        view.blogTitle.text = blog[position].title;
+        view.blogDescription.text = blog[position].description;
+        view.updateBlogButton.setOnClickListener {
+            val layoutInflater = LayoutInflater.from(context);
+            val view = layoutInflater.inflate(R.layout.update_dialog, null);
+            val dialogBuilder = AlertDialog.Builder(context);
+            dialogBuilder.setView(view);
+            val dialog = dialogBuilder.create();
+            dialog.show();
+            view.updateIDInput.setText(blog[position].id.toString());
+            view.updateTitleInput.setText(blog[position].title);
+            view.updateDescriptionInput.setText(blog[position].description);
+            view.updateOkayButton.setOnClickListener {
+                if (view.updateTitleInput.text.toString() == "" || view.updateDescriptionInput.text.toString() == "")
+                    return@setOnClickListener;
+                var myDatabase = MyDatabase(context);
+                myDatabase.updateBlog(BlogTemplate(
+                    blog[position].id,
+                    view.updateTitleInput.text.toString(),
+                    view.updateDescriptionInput.text.toString()));
+                updateArrayAdapter(context);
+                dialog.cancel();
+            }
+            view.updateCancelButton.setOnClickListener {
+                dialog.cancel();
+            }
+        }
+        view.deleteBlogButton.setOnClickListener {
+            val layoutInflater = LayoutInflater.from(context);
+            val view = layoutInflater.inflate(R.layout.delete_dialog, null);
+            val dialogBuilder = AlertDialog.Builder(context);
+            dialogBuilder.setView(view);
+            val dialog = dialogBuilder.create();
+            dialog.show();
+            view.deleteOkayButton.setOnClickListener {
+                var myDatabase = MyDatabase(context);
+                myDatabase.deleteBlog(blog[position].id);
+                updateArrayAdapter(context);
+                dialog.cancel();
+            }
+            view.deleteCancelButton.setOnClickListener {
+                dialog.cancel();
+            }
+        }
+        return view;
+    }
+}
