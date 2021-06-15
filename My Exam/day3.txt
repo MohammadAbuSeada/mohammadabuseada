@@ -1,0 +1,212 @@
+//Thats Database Helper
+
+import android.content.ContentValues
+import android.content.Context
+import android.database.Cursor
+import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteException
+import android.database.sqlite.SQLiteOpenHelper
+class SchoolModel(
+    var id: Int,
+    var name: String,
+    var address: String,
+    var phone: String,
+    var number: Int
+) {
+
+}
+
+class DatabaseHandler(context: Context): SQLiteOpenHelper(context,DATABASE_NAME,null,DATABASE_VERSION) {
+    companion object {
+        private const val DATABASE_VERSION = 1
+        private const val DATABASE_NAME = "school_db"
+        private const val TABLE_NAME = "school"
+        private const val KEY_ID = "Id"
+        private const val KEY_NAME = "Name"
+        private const val KEY_ADDRESS = "Address"
+        private const val KEY_PHONE = "Phone"
+        private const val KEY_NUMBER = "Number"
+    }
+    override fun onCreate(db: SQLiteDatabase?) {
+        val CREATE_TABLE = ("CREATE TABLE " + TABLE_NAME + "("
+                + KEY_ID +  " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + KEY_NAME +  " TEXT,"
+                + KEY_ADDRESS +  " TEXT,"
+                + KEY_PHONE +  " INTEGER,"
+                + KEY_NUMBER +  " INTEGER"
+                + ")"
+                )
+        db?.execSQL(CREATE_TABLE)
+    }
+    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
+        db!!.execSQL("DROP TABLE IF EXISTS $TABLE_NAME")
+        onCreate(db)
+    }
+    fun addSchool(modelClass: SchoolModel):Long{
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+//        contentValues.put(KEY_ID, modelClass.id)
+        contentValues.put(KEY_NAME, modelClass.name)
+        contentValues.put(KEY_ADDRESS, modelClass.address)
+        contentValues.put(KEY_PHONE, modelClass.phone)
+        contentValues.put(KEY_NUMBER, modelClass.number)
+        val success = db.insert(TABLE_NAME, null, contentValues)
+        db.close()
+        return success
+    }
+    fun viewSchool():ArrayList<SchoolModel>{
+        val list = ArrayList<SchoolModel>()
+        val selectQuery = "SELECT  * FROM $TABLE_NAME"
+        val db = this.readableDatabase
+        var cursor: Cursor? = null
+        try{
+            cursor = db.rawQuery(selectQuery, null)
+        }catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return ArrayList()
+        }
+
+        if (cursor.moveToFirst()) {
+            do {
+
+                val modelClass = SchoolModel(
+                    cursor.getInt(cursor.getColumnIndex(KEY_ID)),
+                    cursor.getString(cursor.getColumnIndex(KEY_NAME)),
+                    cursor.getString(cursor.getColumnIndex(KEY_ADDRESS)),
+                    cursor.getString(cursor.getColumnIndex(KEY_PHONE)),
+                    cursor.getInt(cursor.getColumnIndex(KEY_NUMBER))
+                )
+                list.add(modelClass)
+            } while (cursor.moveToNext())
+        }
+        return list
+    }
+    fun deleteSchool(modelClass: SchoolModel):Int{
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(KEY_ID, modelClass.id)
+        val success = db.delete(TABLE_NAME,"$KEY_ID="+modelClass.id,null)
+        db.close()
+        return success
+    }
+}
+
+
+
+
+// This is objects I will use them more than once
+
+var schools: ArrayList<SchoolModel>? = null
+var schoolHelper:DatabaseHandler? = null
+var schoolAdapter: SchoolAdapter? = null
+
+
+//Wright this in Add Activity
+
+
+add_btn.setOnClickListener {
+
+
+//                schools?.add(SchoolModel(0,
+//                    name =shcoolname_edt.text.toString(),
+//                    address =shcooladdress_edt.text.toString(),
+//                    phone =phone_edt.text.toString().toInt(),
+//                    number =number_edt.text.toString().toInt()))
+
+
+                schoolHelper?.addSchool(SchoolModel(1,
+                    name =shcoolname_edt.text.toString(),
+                    address =shcooladdress_edt.text.toString(),
+                    phone =phone_edt.text.toString(),
+                    number =number_edt.text.toString().toInt()))
+
+            shcoolname_edt.setText("")
+            shcooladdress_edt.setText("")
+            phone_edt.setText("")
+            number_edt.setText("")
+            Toast.makeText(this,"record added", Toast.LENGTH_LONG).show()
+        }
+
+
+//Wright this in MyAdapter File
+
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import android.os.Build
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.Toast
+import androidx.annotation.RequiresApi
+import kotlinx.android.synthetic.main.custom_view_item.view.*
+
+
+    var myid = 1234
+class SchoolAdapter(context: Context,
+                    private val schools: ArrayList<SchoolModel>)
+    : ArrayAdapter<SchoolModel>(context, R.layout.custom_view_item, schools) {
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    @SuppressLint("ViewHolder")
+    override fun getView(position: Int, view: View?, parent: ViewGroup): View {
+        val inflater: LayoutInflater = LayoutInflater.from(context)
+        val rowView = inflater.inflate(R.layout.custom_view_item, parent, false)
+
+//
+هاد الكود مع الي فوقه (الادابتر) مباشرة 
+//A simple example of moving between activity, transferring data, and also deleting an object from the database
+
+        rowView.details_btn.setOnClickListener {
+            val intent = Intent(context, DetailsActivity::class.java).apply {
+                putExtra("id",position)
+            }
+            context.startActivity(intent)
+        }
+
+
+        rowView.delete_btn.setOnClickListener {
+
+            val databaseHandler = DatabaseHandler(context)
+
+            databaseHandler.deleteSchool(SchoolModel(schools[position].id,"","","",0))
+            schools.removeAt(position)
+            schoolAdapter?.notifyDataSetChanged()
+            Toast.makeText(getContext(),"record deleted", Toast.LENGTH_LONG).show()
+
+	}
+
+
+//Wright this in view activity
+    override fun onResume() {
+
+        schoolHelper = DatabaseHandler(this)
+        schools = schoolHelper!!.viewSchool()
+        schoolAdapter = SchoolAdapter(this, schools!!)
+        listview.adapter = schoolAdapter
+        super.onResume()
+    }
+
+//This code in DetalidActivity in VocationalSchool Projact
+
+        val position = intent.getIntExtra("id", Int.MAX_VALUE)
+
+        shcoolname_tv.text = "اسم المدرسة: " + schools?.get(position)?.name
+        shcooladdress_tv.text = "عنوان المدرسة: " + schools?.get(position)?.address
+        phone_tv.text ="رقم الهاتف: " +  schools?.get(position)?.phone
+        number_tv.text ="عدد الطلاب: " +  schools?.get(position)?.number
+
+
+        back_details_btn.setOnClickListener {
+            val intent = Intent(this, ShowActivity::class.java)
+            startActivity(intent)
+        }
+
+
+
+
+
+
+
+
