@@ -203,6 +203,10 @@ class SchoolAdapter(context: Context,
             startActivity(intent)
         }
 
+//Adptering Simple ListView
+
+            val myAdapter1= ArrayAdapter(this,android.R.layout.simple_list_item_1,array)
+            listview.adapter=myAdapter1
 
 
 
