@@ -1,0 +1,22 @@
+
+
+ fun deleteMosque(id: Int):Int{
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(KEY_ID, id)
+        val success = db.delete(TABLE_NAME,"$KEY_ID="+ id,null)
+        db.close()
+        return success
+    }
+
+//////////////////
+استدعاء الدالة في  Adapter
+
+
+rowView.imageViewdelete.setOnClickListener {
+            val databaseHandler = DatabaseHelper(getContext())
+            databaseHandler.deleteMosque(Mosques[position].id)
+            Mosques.removeAt(position)
+            mosqueAdapter?.notifyDataSetChanged()
+            Toast.makeText(getContext(),"record deleted", Toast.LENGTH_LONG).show()
+        }

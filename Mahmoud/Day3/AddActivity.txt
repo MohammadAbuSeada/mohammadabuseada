@@ -1,0 +1,129 @@
+
+CODE
+
+
+import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import kotlinx.android.synthetic.main.activity_add.*
+import kotlinx.android.synthetic.main.activity_main.*
+
+class AddActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_add)
+        back_btn.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
+
+        add_btn.setOnClickListener {
+
+
+            schools?.add(SchoolModel(0,
+                name=shcoolname_edt.text.toString(),
+                address=shcooladdress_edt.text.toString(),
+                phone=phone_edt.text.toString().toInt(),
+                number=number_edt.text.toString().toInt()))
+
+
+            schoolHelper?.addSchool(SchoolModel(1,
+                name=shcoolname_edt.text.toString(),
+                address=shcooladdress_edt.text.toString(),
+                phone=phone_edt.text.toString().toInt(),
+                number=number_edt.text.toString().toInt()))
+
+            shcoolname_edt.setText("")
+            shcooladdress_edt.setText("")
+            phone_edt.setText("")
+            number_edt.setText("")
+
+        }
+    }
+
+}
+
+
+
+---------------------------------------------------
+
+XML
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".AddActivity">
+
+    <TextView
+        android:id="@+id/textView_activity_add"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:gravity="center"
+        android:text="إضافة بيانات مدرسة مهنية"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/shcoolname_edt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="إسم المدرسة المهنية"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/shcooladdress_edt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="عنوان المدرسة"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/phone_edt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:gravity="right"
+        android:hint="رقم الهاتف"
+        android:inputType="phone"
+        tools:ignore="RtlHardcoded" />
+
+    <EditText
+        android:id="@+id/number_edt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="عدد طلاب المدرسة"
+        android:inputType="number" />
+
+    <Button
+        android:id="@+id/add_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="إضافة"
+        android:textSize="24sp"
+        android:background="@drawable/btn1"/>
+
+    <Button
+        android:id="@+id/back_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="للخلف"
+        android:textSize="24sp"
+        android:background="@drawable/btn1"/>
+</LinearLayout>
+

@@ -1,0 +1,93 @@
+Code 
+
+import android.annotation.SuppressLint
+import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import kotlinx.android.synthetic.main.activity_details.*
+
+class DetailsActivity : AppCompatActivity() {
+
+    @SuppressLint("SetTextI18n")
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_details)
+
+        val position = intent.getIntExtra("id", Int.MAX_VALUE)
+
+        shcoolname_tv.text = "اسم المدرسة: " + schools?.get(position)?.name
+        shcooladdress_tv.text = "عنوان المدرسة: " + schools?.get(position)?.address
+        phone_tv.text ="رقم الهاتف: " +  schools?.get(position)?.phone.toString()
+        number_tv.text ="عدد الطلاب: " +  schools?.get(position)?.number
+
+
+        back_details_btn.setOnClickListener {
+            val intent = Intent(this, ShowActivity::class.java)
+            startActivity(intent)
+        }
+    }
+}
+
+
+--------------------------------------------------------------
+XML
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DetailsActivity">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/details_image"
+            android:layout_width="match_parent"
+            android:layout_height="239dp"
+            app:srcCompat="@drawable/school" />
+
+        <TextView
+            android:id="@+id/shcoolname_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/shcooladdress_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/phone_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/number_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="24sp"
+             />
+
+        <ImageButton
+            android:id="@+id/back_details_btn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="370dp"
+            android:background="@drawable/btn1"
+            app:srcCompat="@android:drawable/ic_menu_revert" />
+    </LinearLayout>
+
+</LinearLayout>
+

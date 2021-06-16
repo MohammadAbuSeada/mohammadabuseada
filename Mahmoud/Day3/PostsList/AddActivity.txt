@@ -1,0 +1,73 @@
+"Add Activity Code"
+
+
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.widget.Toast
+import kotlinx.android.synthetic.main.activity_add.*
+
+class AddActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_add)
+
+        addBtn.setOnClickListener {
+
+            val title = editTextTitle.text.toString()
+            val description = editTextDescription.text.toString()
+
+            val postHelper = DatabaseHandler(this)
+
+            if(title.trim()!="" && description.trim()!="" ){
+
+                val status = postHelper.addPOSTS(PostModel(0, title, description))
+                if(status > -1){
+                    Toast.makeText(applicationContext,"record added", Toast.LENGTH_LONG).show()
+                }
+            }else{
+                Toast.makeText(applicationContext,"title or description cannot be blank", Toast.LENGTH_LONG).show()
+            }
+            finish();
+        }
+
+    }
+}
+
+----------------------------------------
+"Add Activity Xml"
+
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".AddActivity">
+
+    <EditText
+        android:id="@+id/editTextTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Title"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/editTextDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:gravity="start|top"
+        android:hint="Description"
+        android:inputType="textMultiLine"
+        android:minLines="13" />
+
+    <Button
+        android:id="@+id/addBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Post" />
+</LinearLayout>

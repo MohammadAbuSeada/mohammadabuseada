@@ -1,0 +1,106 @@
+
+
+import android.annotation.SuppressLint
+import android.content.ContentValues
+import android.content.Context
+import android.database.Cursor
+import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteException
+import android.database.sqlite.SQLiteOpenHelper
+class PostModel(
+    var id: Int,
+    var title: String,
+    var des: String
+)
+class DatabaseHandler(context: Context): SQLiteOpenHelper(context,DATABASE_NAME,null,DATABASE_VERSION) {
+    companion object {
+        private val DATABASE_VERSION = 1
+        private val DATABASE_NAME = "PostsDB"
+        private val TABLE_NAME = "Posts"
+        private val KEY_ID = "Id"
+        private val KEY_TITLE = "Title"
+        private val KEY_DES = "Des"
+    }
+    override fun onCreate(db: SQLiteDatabase?) {
+        val CREATE_TABLE = ("CREATE TABLE " + TABLE_NAME + "("
+                + KEY_ID +  " INTEGER PRIMARY KEY,"
+                + KEY_TITLE +  " TEXT,"
+                + KEY_DES +  " TEXT"
+                + ")"
+                )
+        db?.execSQL(CREATE_TABLE)
+    }
+    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
+        db!!.execSQL("DROP TABLE IF EXISTS $TABLE_NAME")
+        onCreate(db)
+    }
+    fun addPOSTS(modelClass: PostModel):Long{
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(KEY_ID, modelClass.id)
+        contentValues.put(KEY_TITLE, modelClass.title)
+        contentValues.put(KEY_DES, modelClass.des)
+        val success = db.insert(TABLE_NAME, null, contentValues)
+        db.close()
+        return success
+    }
+    @SuppressLint("Recycle")
+    fun viewPOSTS():ArrayList<PostModel>{
+        val list = ArrayList<PostModel>()
+        val selectQuery = "SELECT  * FROM $TABLE_NAME"
+        val db = this.readableDatabase
+        var cursor: Cursor? = null
+        try{
+            cursor = db.rawQuery(selectQuery, null)
+        }catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return ArrayList()
+        }
+
+        if (cursor.moveToFirst()) {
+            do {
+
+                val modelClass = PostModel(
+                    cursor.getInt(cursor.getColumnIndex(KEY_ID)),
+                    cursor.getString(cursor.getColumnIndex(KEY_TITLE)),
+                    cursor.getString(cursor.getColumnIndex(KEY_DES))
+                )
+                list.add(modelClass)
+            } while (cursor.moveToNext())
+        }
+        return list
+    }
+    fun searchPOSTS(string: String):ArrayList<PostModel>{
+        val list = ArrayList<PostModel>()
+        val selectQuery = "SELECT  * FROM $TABLE_NAME WHERE $KEY_ID LIKE '%${string}%'"
+        val db = this.readableDatabase
+        var cursor: Cursor? = null
+        try{
+            cursor = db.rawQuery(selectQuery, null)
+        }catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return ArrayList()
+        }
+
+        if (cursor.moveToFirst()) {
+            do {
+
+                val modelClass = PostModel(
+                    cursor.getInt(cursor.getColumnIndex(KEY_ID)),
+                    cursor.getString(cursor.getColumnIndex(KEY_TITLE)),
+                    cursor.getString(cursor.getColumnIndex(KEY_DES))
+                )
+                list.add(modelClass)
+            } while (cursor.moveToNext())
+        }
+        return list
+    }
+    fun deletePOSTS(modelClass: PostModel):Int{
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(KEY_ID, modelClass.id)
+        val success = db.delete(TABLE_NAME,"$KEY_ID="+modelClass.id,null)
+        db.close()
+        return success
+    }
+}
